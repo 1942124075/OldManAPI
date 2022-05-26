@@ -3,18 +3,18 @@ using Newtonsoft.Json;
 using OldManAPI.Model;
 using System.Data.SqlClient;
 
-
 namespace OldManAPI.Controllers
 {
     [ApiController]
-    [Route("GetSwiper")]
-    public class GetSwiper : Controller
+    [Route("GetResources")]
+    public class GetResources : Controller
     {
-        [HttpGet(Name = "GetSwiper")]
-        public string Get()
+        [HttpGet(Name = "GetResources")]
+        public string Get(string category)
         {
             SqlConnection sqlConnection = BaseHelper.GetConnect();
-            SqlCommand sqlCommand = new SqlCommand("SELECT ID ,NAME ,IMAGE,ContentS FROM BaseList WHERE CATEGORY = 'Swiper'", sqlConnection);
+            SqlCommand sqlCommand = new SqlCommand("SELECT ID ,NAME ,IMAGE,ContentS FROM BaseList WHERE CATEGORY = @category", sqlConnection);
+            sqlCommand.Parameters.AddWithValue("category", category);
             SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
             BaseInfo baseInfo;
             List<BaseInfo> baseList = new List<BaseInfo>();
@@ -23,7 +23,7 @@ namespace OldManAPI.Controllers
                 baseInfo = new BaseInfo()
                 {
                     Id = sqlDataReader.GetInt32(sqlDataReader.GetOrdinal("ID")),
-                    Name = sqlDataReader.IsDBNull(sqlDataReader.GetOrdinal("NAME"))? "" : sqlDataReader.GetString(sqlDataReader.GetOrdinal("NAME")),
+                    Name = sqlDataReader.IsDBNull(sqlDataReader.GetOrdinal("NAME")) ? "" : sqlDataReader.GetString(sqlDataReader.GetOrdinal("NAME")),
                     Image = BaseHelper.WebPrefix + (sqlDataReader.IsDBNull(sqlDataReader.GetOrdinal("IMAGE")) ? "" : sqlDataReader.GetString(sqlDataReader.GetOrdinal("IMAGE"))),
                     Content = sqlDataReader.IsDBNull(sqlDataReader.GetOrdinal("ContentS")) ? "" : sqlDataReader.GetString(sqlDataReader.GetOrdinal("ContentS"))
                 };
