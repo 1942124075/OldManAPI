@@ -13,7 +13,7 @@ namespace OldManAPI.Controllers
         public string Get(string category)
         {
             SqlConnection sqlConnection = BaseHelper.GetConnect();
-            SqlCommand sqlCommand = new SqlCommand("SELECT ID ,NAME ,IMAGE,ContentS FROM BaseList WHERE CATEGORY = @category", sqlConnection);
+            SqlCommand sqlCommand = new SqlCommand("SELECT ID ,NAME ,IMAGE,ContentS,Price FROM BaseList WHERE CATEGORY = @category", sqlConnection);
             sqlCommand.Parameters.AddWithValue("category", category);
             SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
             BaseInfo baseInfo;
@@ -25,7 +25,8 @@ namespace OldManAPI.Controllers
                     Id = sqlDataReader.GetInt32(sqlDataReader.GetOrdinal("ID")),
                     Name = sqlDataReader.IsDBNull(sqlDataReader.GetOrdinal("NAME")) ? "" : sqlDataReader.GetString(sqlDataReader.GetOrdinal("NAME")),
                     Image = BaseHelper.WebPrefix + (sqlDataReader.IsDBNull(sqlDataReader.GetOrdinal("IMAGE")) ? "" : sqlDataReader.GetString(sqlDataReader.GetOrdinal("IMAGE"))),
-                    Content = sqlDataReader.IsDBNull(sqlDataReader.GetOrdinal("ContentS")) ? "" : sqlDataReader.GetString(sqlDataReader.GetOrdinal("ContentS"))
+                    Content = sqlDataReader.IsDBNull(sqlDataReader.GetOrdinal("ContentS")) ? "" : sqlDataReader.GetString(sqlDataReader.GetOrdinal("ContentS")),
+                    Price = sqlDataReader.IsDBNull(sqlDataReader.GetOrdinal("Price")) ? 0.00 : sqlDataReader.GetDouble(sqlDataReader.GetOrdinal("Price"))
                 };
                 baseList.Add(baseInfo);
             }

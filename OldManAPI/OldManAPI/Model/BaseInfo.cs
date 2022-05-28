@@ -18,5 +18,9 @@
         /// 备注
         /// </summary>
         public string? Content { get; set; }
+        /// <summary>
+        /// 价格
+        /// </summary>
+        public double Price { get; set; }
     }
 }
